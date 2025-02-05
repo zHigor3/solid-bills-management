@@ -1,0 +1,30 @@
+datasource db {
+  provider = "sqlite" // Troque para "postgresql" ao migrar
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id         String  @id @default(uuid())
+  firstName  String
+  lastName   String
+  email      String  @unique
+  userName   String  @unique
+  password   String
+  anniversary DateTime
+  bills      Bill[]
+}
+
+model Bill {
+  id          String   @id @default(uuid())
+  userId      String
+  description String
+  startDate   DateTime
+  endDate     DateTime?
+  price       Float
+  isRecurrent Boolean
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

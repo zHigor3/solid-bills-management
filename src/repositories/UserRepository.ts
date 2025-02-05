@@ -1,44 +1,61 @@
+import { PrismaClient } from "@prisma/client";
+import { Database } from "../infra/Database";
 import { IUserRepository } from "./interfaces/IUserRepository";
 import { User } from "../models/User";
 import { Bill } from "../models/Bill";
 
 export class UserRepository implements IUserRepository {
-  private users: User[] = []
+  private prisma: PrismaClient;
+
+  constructor() {
+    this.prisma = Database.getInstance();
+  }
 
   async createUser(user: User): Promise<void> {
-    this.users.push(user)
-    console.log(user)
-    console.log(this.users)
+    await this.prisma.user.create({
+      data: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        userName: user.userName,
+        password: user.password,
+        anniversary: user.anniversary,
+      },
+    });
   }
 
   async listUsers(): Promise<User[]> {
-    return this.users
+    return this.prisma.user.findMany({ include: { bills: true } });
   }
 
   async getById(id: string): Promise<User | undefined> {
-    console.log(this.users)
-    return this.users.find(user => user.id === id)
+    const resp = await this.prisma.user.findUnique({ where: { id }, include: { bills: true } }) || undefined;
+    return resp
   }
 
   async getBills(userId: string): Promise<Bill[]> {
-    const user = this.users.find(user => user.id === userId)
-    return user?.bills ? user?.bills : []
-  }
-
-  async changePassword(id: string, oldPassword: string, newPassword: string): Promise<void> {
-    const user = this.users.find(user => user.id === id)
-    if(user?.password === oldPassword) {
-      user.password = newPassword
-    }
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { bills: true },
+    });
+  
+    return user?.bills ?? [];
   }
 
   async addBillToUser(userId: string, bill: Bill): Promise<User | undefined> {
-    const user = await this.getById(userId)
-    console.log(user)
-    if (user) {
-      user.bills.push(bill)
-      return user
-    }
-    return undefined
+    await this.prisma.bill.create({
+      data: {
+        id: bill.id,
+        userId: userId,
+        description: bill.description,
+        startDate: bill.startDate,
+        endDate: bill.endDate,
+        price: bill.price,
+        isRecurrent: bill.isRecurrent,
+      },
+    });
+
+    return this.getById(userId);
   }
 }

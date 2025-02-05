@@ -17,13 +17,13 @@ export class BillService {
     price: number, 
     isRecurrent: boolean
   ): Promise<Bill> {
-    const bill = new Bill(uuid(), userId, description, startDate, endDate, price, isRecurrent)
-    await this.billRepository.createBill(bill)
-    
-    const user = await this.userRepository.addBillToUser(userId, bill)
-    if (user) {
+    const user = await this.userRepository.getById(userId)
+    if(user) {
+      const bill = new Bill(uuid(), userId, description, startDate, endDate, price, isRecurrent)
+      await this.billRepository.createBill(bill)
       return bill
     }
+
     throw new Error("Usuário não encontrado")
   }
 }

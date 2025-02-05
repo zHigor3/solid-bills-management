@@ -3,6 +3,27 @@ Esta API foi desenvolvida com o objetivo de estudar e aplicar os **princípios d
 
 A finalidade desta API é permitir que os usuários **armazenem e gerenciem suas contas do dia a dia**, proporcionando uma **visualização clara de seus gastos** e facilitando o controle financeiro.
 
+## Como executar o projeto
+Para executar o projeto em seu computador, é necessário que esteja instalado o NodeJS v^20.0.0, após isso, apenas execute os seguintes comandos:
+
+```sh
+npm install
+npm run migrate
+```
+
+Logo após as instalações e configurações, é possível startar o projeto rodando o seguinte comando:
+
+```sh
+npm run dev
+```
+
+Para buildar o projeto e rodar o build, é necessário rodar estes comandos:
+
+```sh
+npm run build
+npm run start
+```
+
 ## O que é **SOLID**
 SOLID é um conjunto de cinco princípios de design de software orientado a objetos, criado por Robert C. Martin (Uncle Bob). Esses princípios ajudam a tornar o código mais organizado, modular e fácil de manter, reduzindo o acoplamento e aumentando a coesão do sistema.
 

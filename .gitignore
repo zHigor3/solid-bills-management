@@ -129,6 +129,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-migrations
-migrations/*
-dev.db
+*.db
+*.db-journal
+migrations/

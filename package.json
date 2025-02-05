@@ -4,6 +4,7 @@
   "description": "test api",
   "main": "index.js",
   "scripts": {
+    "migrate": "prisma migrate dev --name init",
     "build": "tsc",
     "start": "src/server.js",
     "dev": "ts-node src/server.ts"

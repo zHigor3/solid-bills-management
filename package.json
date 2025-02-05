@@ -6,7 +6,7 @@
   "scripts": {
     "migrate": "prisma migrate dev --name init",
     "build": "tsc",
-    "start": "src/server.js",
+    "start": "node dist/server.js",
     "dev": "ts-node src/server.ts"
   },
   "author": "Higor dos Santos Pinho",
